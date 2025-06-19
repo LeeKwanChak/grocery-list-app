@@ -1,7 +1,9 @@
 package com.marcus.grocerylist.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class Item {
     @Id
