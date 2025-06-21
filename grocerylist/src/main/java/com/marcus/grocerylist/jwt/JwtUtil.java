@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Component
 public class JwtUtil {
@@ -45,5 +46,18 @@ public class JwtUtil {
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token);
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Date extractExpiration(String token) {
+        return parseToken(token).getBody().getExpiration();
     }
 }

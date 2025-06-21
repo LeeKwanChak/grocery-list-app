@@ -1,9 +1,9 @@
 package com.marcus.grocerylist.controller;
 
 import com.marcus.grocerylist.jwt.JwtUtil;
+import com.marcus.grocerylist.model.User;
 import com.marcus.grocerylist.dto.AuthRequest;
 import com.marcus.grocerylist.dto.AuthResponse;
-import com.marcus.grocerylist.model.User;
 import com.marcus.grocerylist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
