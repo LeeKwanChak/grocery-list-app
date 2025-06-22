@@ -6,6 +6,7 @@ import com.marcus.grocerylist.model.Item;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -30,4 +31,6 @@ public class ItemService {
     public List<Item> getItemsByGroceryList(GroceryList groceryList){
         return itemRepository.findByGroceryList(groceryList);
     }
+
+    public Optional<Item> findById(Long id) { return itemRepository.findById(id); }
 }

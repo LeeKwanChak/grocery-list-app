@@ -16,6 +16,10 @@ public class GroceryListService {
         this.groceryListRepository = groceryListRepository;
     }
 
+    public List<GroceryList> findListsByUser(User user){
+        return groceryListRepository.findByUser(user);
+    }
+
     public List<GroceryList> getListById(User user){
         return groceryListRepository.findByUser(user);
     }
