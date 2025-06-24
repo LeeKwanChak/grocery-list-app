@@ -1,6 +1,8 @@
 package com.marcus.grocerylist.controller;
 
 
+import com.marcus.grocerylist.dto.ItemCreateRequest;
+import com.marcus.grocerylist.dto.ItemsBatchCreateRequest;
 import com.marcus.grocerylist.model.GroceryList;
 import com.marcus.grocerylist.model.Item;
 import com.marcus.grocerylist.model.User;
@@ -15,8 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/items")
@@ -37,35 +41,40 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<Item> createItem(@Valid @RequestBody ItemCreateRequest itemCreateRequest) {
         User currentUser = getCurrentUser();
 
-        // 驗證項目所屬的清單是否存在且屬於當前使用者
-        Long listId = item.getGroceryList().getId();
+        Long listId = itemCreateRequest.getGroceryListId();
+
         GroceryList groceryList = groceryListService.getListById(listId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "GroceryList not found"));
 
         if (!groceryList.getUser().getId().equals(currentUser.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to add items to this list.");
         }
+        Item newItem = new Item();
+        newItem.setName(itemCreateRequest.getName());
+        newItem.setGroceryList(groceryList);
+        newItem.setCompleted(itemCreateRequest.isCompleted());
 
-        item.setGroceryList(groceryList);
-        Item savedItem = itemService.saveItem(item);
+        Item savedItem = itemService.saveItem(newItem);
+
         return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+    @DeleteMapping("/{ItemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
         User currentUser = getCurrentUser();
 
-        Item item = itemService.findById(id)
+        Item item = itemService.findById(itemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found"));
 
         if (!item.getGroceryList().getUser().getId().equals(currentUser.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this item.");
         }
 
-        itemService.deleteItem(id);
+        itemService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
 
@@ -97,10 +106,34 @@ public class ItemController {
 
         existingItem.setName(updatedItem.getName());
         existingItem.setCompleted(updatedItem.isCompleted());
-
+        existingItem.setQuantity(updatedItem.getQuantity());
         Item savedItem = itemService.saveItem(existingItem);
         return ResponseEntity.ok(savedItem);
     }
 
+    @DeleteMapping("/batch-delete")
+    public ResponseEntity<Map<String, String>> deleteItemsInBatch(@RequestBody List<Long> itemIds){
+
+        itemService.deleteItemsInBatch(itemIds);
+        return ResponseEntity.ok(Map.of("message", "Selected items deleted successfully."));
+    }
+
+    @PostMapping("/batch-create")
+    public ResponseEntity<Map<String, String>> createItemsInBatch(@Valid @RequestBody ItemsBatchCreateRequest request){
+        User currentUser = getCurrentUser();
+        Long listId = request.getGroceryListId();
+        List<String> itemNames = request.getItemNames();
+
+        GroceryList groceryList = groceryListService.getListById(listId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "GroceryList not found"));
+
+        if(!groceryList.getUser().getId().equals(currentUser.getId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to manage this list.");
+        }
+
+        itemService.createItemsInBatch(groceryList, itemNames);
+
+        return ResponseEntity.ok(Map.of("message", "Items created"));
+    }
 
 }
