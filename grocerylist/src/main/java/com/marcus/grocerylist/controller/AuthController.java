@@ -1,5 +1,6 @@
 package com.marcus.grocerylist.controller;
 
+import com.marcus.grocerylist.exception.UserAlreadyExistsException;
 import com.marcus.grocerylist.jwt.JwtUtil;
 import com.marcus.grocerylist.model.User;
 import com.marcus.grocerylist.dto.AuthRequest;
@@ -11,6 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,20 +33,21 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public String register(@RequestBody AuthRequest request) {
-        if (userService.userExists(request.getUsername())) {
-            return "Username already taken";
-        }
-        if(request.getUsername() == null){
-            return "Username cannot be null";
-        }
+    public ResponseEntity<Map<String, String>> register(@RequestBody AuthRequest request) {
+        try {
+            User newUser = new User(request.getUsername(), request.getPassword(), request.getEmail());
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userService.saveUser(user);
-        return "User registered successfully";
+            userService.registerNewUser(newUser);
+
+            return new ResponseEntity<>(Map.of("message", "User registered successfully"), HttpStatus.CREATED);
+
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("message", "An unexpected error occurred during registration: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
@@ -52,7 +57,7 @@ public class AuthController {
                 )
         );
 
-        String token = jwtUtil.generateToken(request.getUsername());
+        String token = jwtUtil.generateToken(authentication.getName());
         return new AuthResponse(token);
     }
 }
