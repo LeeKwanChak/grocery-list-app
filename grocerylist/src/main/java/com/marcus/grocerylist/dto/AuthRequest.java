@@ -1,6 +1,5 @@
 package com.marcus.grocerylist.dto;
 import lombok.Data;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,4 +22,11 @@ public class AuthRequest {
         this.password = password;
         this.email = email;
     }
+
+    public AuthRequest(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
+
+    public AuthRequest(){};
 }

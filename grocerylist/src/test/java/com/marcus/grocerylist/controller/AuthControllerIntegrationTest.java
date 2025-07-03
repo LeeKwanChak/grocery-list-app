@@ -104,23 +104,25 @@ class AuthControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authRequest)))
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.message").value("An unexpected error occurred during registration: " + errorMessage));
+                .andExpect(jsonPath("$.message").value("An unexpected error occurred: " + errorMessage));
 
         verify(userService, times(1)).registerNewUser(any(User.class));
     }
 
     @Test
     void testLoginSuccess() throws Exception {
-        AuthRequest authRequest = new AuthRequest("testUser", "password123", null);
+        AuthRequest authRequest = new AuthRequest("test@example.com", "password123");
+
         String expectedToken = "mocked.jwt.token";
+        String testUserEmail = "test@example.com";
 
         Authentication authentication = mock(Authentication.class);
-        when(authentication.getName()).thenReturn("testUser");
+        when(authentication.getName()).thenReturn(testUserEmail);
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);
 
-        when(jwtUtil.generateToken("testUser")).thenReturn(expectedToken);
+        when(jwtUtil.generateToken(testUserEmail)).thenReturn(expectedToken);
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -128,8 +130,10 @@ class AuthControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value(expectedToken));
 
-        verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(jwtUtil, times(1)).generateToken("testUser");
+        verify(authenticationManager, times(1)).authenticate(
+                new UsernamePasswordAuthenticationToken(testUserEmail, "password123")
+        );
+        verify(jwtUtil, times(1)).generateToken(testUserEmail);
     }
 
 }

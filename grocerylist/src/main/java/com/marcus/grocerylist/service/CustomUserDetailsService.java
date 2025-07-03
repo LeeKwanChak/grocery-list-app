@@ -5,6 +5,7 @@ import com.marcus.grocerylist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+import com.marcus.grocerylist.exception.EmailNotFoundException;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -13,11 +14,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.marcus.grocerylist.model.User appUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    public UserDetails loadUserByUsername(String email){
+        com.marcus.grocerylist.model.User appUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException("User not found: " + email));
 
-        return User.withUsername(appUser.getUsername())
+        return User.withUsername(appUser.getEmail())
                 .password(appUser.getPassword())
                 .authorities("USER")
                 .build();

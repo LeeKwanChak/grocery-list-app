@@ -34,18 +34,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody AuthRequest request) {
-        try {
             User newUser = new User(request.getUsername(), request.getPassword(), request.getEmail());
-
             userService.registerNewUser(newUser);
-
             return new ResponseEntity<>(Map.of("message", "User registered successfully"), HttpStatus.CREATED);
-
-        } catch (UserAlreadyExistsException e) {
-            return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("message", "An unexpected error occurred during registration: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
 
@@ -53,7 +44,7 @@ public class AuthController {
     public AuthResponse login(@RequestBody AuthRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()
+                        request.getEmail(), request.getPassword()
                 )
         );
 
