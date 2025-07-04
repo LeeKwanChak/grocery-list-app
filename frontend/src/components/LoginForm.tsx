@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import './LoginForm.css';
+import './Form.css';
 
-const LoginForm: React.FC = () => {
+  interface LoginFormProps{
+    onSwitchToRegister: () => void;
+  }
+
+const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
   }
 
   return (
@@ -37,7 +42,7 @@ const LoginForm: React.FC = () => {
       </form>
       <p>
         Do not have an account?{' '}
-        <span className="switch-link">
+        <span className="switch-link" onClick ={onSwitchToRegister}>
           Sign up
         </span>
       </p>

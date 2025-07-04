@@ -17,9 +17,9 @@ const AuthPage: React.FC = () => {
     <div className="auth-container">
 
       {isLoginView ? (
-        <LoginForm/>
+        <LoginForm onSwitchToRegister = {handleSwitchToRegister}/>
       ) : (
-        <RegisterForm/>
+        <RegisterForm onSwitchToLogin = {handleSwitchToLogin}/>
       )}
     </div>
   );
