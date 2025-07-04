@@ -1,11 +1,11 @@
 import { useState } from 'react'
-
+import AuthPage from './pages/AuthPage';
 import './App.css'
 
 function App() {
 
   return (
-    <p>Hello World</p>
+    <AuthPage />
   )
 }
 
