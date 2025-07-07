@@ -1,7 +1,7 @@
 package com.marcus.grocerylist.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marcus.grocerylist.dto.AuthRequest;
+import com.marcus.grocerylist.dto.RegistrationRequest;
 import com.marcus.grocerylist.exception.UserAlreadyExistsException;
 import com.marcus.grocerylist.jwt.JwtUtil;
 import com.marcus.grocerylist.model.User;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,7 +44,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testRegisterUserSuccess() throws Exception {
-        AuthRequest authRequest = new AuthRequest("testUser", "password123", "test@example.com");
+        RegistrationRequest authRequest = new RegistrationRequest("testUser", "password123", "test@example.com");
 
         when(userService.registerNewUser(any(User.class))).thenReturn(new User());
 
@@ -60,7 +59,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testRegisterUserAlreadyExistsByUsername() throws Exception {
-        AuthRequest authRequest = new AuthRequest("existingUser", "password123", "exist@example.com");
+        RegistrationRequest authRequest = new RegistrationRequest("existingUser", "password123", "exist@example.com");
         String errorMessage = "Username existingUser already exist.";
 
         doThrow(new UserAlreadyExistsException(errorMessage))
@@ -77,7 +76,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testRegisterUserAlreadyExistsByEmail() throws Exception {
-        AuthRequest authRequest = new AuthRequest("newUser", "password123", "existing@example.com");
+        RegistrationRequest authRequest = new RegistrationRequest("newUser", "password123", "existing@example.com");
         String errorMessage = "Email 'existing@example.com' already exists.";
 
         doThrow(new UserAlreadyExistsException(errorMessage))
@@ -94,7 +93,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testRegisterUserUnexpectedError() throws Exception {
-        AuthRequest authRequest = new AuthRequest("anyUser", "anyPass", "any@example.com");
+        RegistrationRequest authRequest = new RegistrationRequest("anyUser", "anyPass", "any@example.com");
         String errorMessage = "Some unexpected error.";
 
         doThrow(new RuntimeException(errorMessage))
@@ -111,7 +110,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testLoginSuccess() throws Exception {
-        AuthRequest authRequest = new AuthRequest("test@example.com", "password123");
+        RegistrationRequest authRequest = new RegistrationRequest("test@example.com", "password123");
 
         String expectedToken = "mocked.jwt.token";
         String testUserEmail = "test@example.com";

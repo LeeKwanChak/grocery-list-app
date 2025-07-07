@@ -14,11 +14,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email){
-        com.marcus.grocerylist.model.User appUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotFoundException("User not found: " + email));
+    public UserDetails loadUserByUsername(String username){
+        com.marcus.grocerylist.model.User appUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        return User.withUsername(appUser.getEmail())
+        return User.withUsername(appUser.getUsername())
                 .password(appUser.getPassword())
                 .authorities("USER")
                 .build();

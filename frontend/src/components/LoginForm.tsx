@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Form.css';
+import { setToken } from '../utils/auth';
 
   interface LoginFormProps{
+    onLoginSuccess: (token: string) => void
     onSwitchToRegister: () => void;
   }
 
-const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister}) => {
+const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,9 +30,9 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister}) => {
       const data = await response.json();
       console.log('Login successful:' , data);
       alert('Login successful!');
-      localStorage.setItem('token', data.token)
+      setToken(data.token);
       console.log('JWT Token saved:', data.token);
-      navigate('/grocery-list');
+      onLoginSuccess(data.token);
       
     }else{
 

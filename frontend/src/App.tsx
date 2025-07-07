@@ -1,15 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
-import GroceryListPage from './pages/GroceryListPage';
+import HomePage from './pages/HomePage';
 import './App.css'
-
-const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('token');
-  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
-};
+import { getToken, removeToken } from './utils/auth';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() =>{
+    if(getToken()) {
+      setIsAuthenticated(true)
+    }
+  })
+
+  const handleLoginSuccess = (jwt_token: string) =>{
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () =>{
+    removeToken();
+    setIsAuthenticated(false)
+  }
 
   return (
     <Router>
@@ -18,21 +30,15 @@ function App() {
           <h1>My Grocery List App</h1>
         </header>
         <Routes>
-          <Route path ="/auth" element = {<AuthPage />}/>
+          <Route path ="/auth" element = {
+            isAuthenticated ? <Navigate to = "/" replace/> : <AuthPage onLoginSuccess ={handleLoginSuccess}/>}/>
 
-          <Route
-            path="/grocery-list"
-            element={
-              <PrivateRoute>
-                <GroceryListPage />
-              </PrivateRoute>
-            }
+          <Route path = "/" element ={
+            isAuthenticated ? <HomePage onLogout={handleLogout} /> : <Navigate to = "/auth" replace/>
+          }
           />
 
-          <Route
-            path="/"
-            element={<Navigate to={localStorage.getItem('token') ? "/grocery-list" : "/auth"} replace />}
-          />
+
         </Routes>
         <footer>
           <p>&copy; 2025 My Grocery List App</p>
