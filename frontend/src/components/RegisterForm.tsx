@@ -58,6 +58,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
 
     return(
         <div className = "form-container">
+            <h2>My Grocery List</h2>
             <h2>Sign up</h2>
             <p className="subtitle">Sign up to continue</p>
             <form onSubmit={handleSubmit}>

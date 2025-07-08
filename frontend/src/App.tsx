@@ -12,7 +12,7 @@ function App() {
     if(getToken()) {
       setIsAuthenticated(true)
     }
-  })
+  }, [])
 
   const handleLoginSuccess = (jwt_token: string) =>{
     setIsAuthenticated(true)
@@ -26,9 +26,9 @@ function App() {
   return (
     <Router>
       <div className = "App">
-        <header>
+        {/* <header>
           <h1>My Grocery List App</h1>
-        </header>
+        </header> */}
         <Routes>
           <Route path ="/auth" element = {
             isAuthenticated ? <Navigate to = "/" replace/> : <AuthPage onLoginSuccess ={handleLoginSuccess}/>}/>
@@ -37,8 +37,6 @@ function App() {
             isAuthenticated ? <HomePage onLogout={handleLogout} /> : <Navigate to = "/auth" replace/>
           }
           />
-
-
         </Routes>
         <footer>
           <p>&copy; 2025 My Grocery List App</p>

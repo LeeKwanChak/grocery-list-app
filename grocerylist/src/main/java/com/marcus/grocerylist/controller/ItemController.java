@@ -56,6 +56,7 @@ public class ItemController {
         newItem.setName(itemCreateRequest.getName());
         newItem.setGroceryList(groceryList);
         newItem.setCompleted(itemCreateRequest.isCompleted());
+        newItem.setQuantity(itemCreateRequest.getQuantity());
 
         Item savedItem = itemService.saveItem(newItem);
 
@@ -63,7 +64,7 @@ public class ItemController {
 
     }
 
-    @DeleteMapping("/{ItemId}")
+    @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
         User currentUser = getCurrentUser();
 

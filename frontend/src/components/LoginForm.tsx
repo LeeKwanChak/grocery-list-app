@@ -57,6 +57,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess
 
   return (
     <div className="form-container">
+      <h2>My Grocery List</h2>
       <h2>Sign in</h2>
       <p className = "subtitle">Sign in to continue</p>
       <form onSubmit={handleSubmit}>

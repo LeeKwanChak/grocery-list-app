@@ -17,8 +17,8 @@ public class Item {
 
     private boolean isCompleted = false;
 
-    @Column(nullable = false, columnDefinition = "integer default 1")
-    private int quantity = 1;
+    @Column(nullable = false)
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "list_id", nullable = false)
