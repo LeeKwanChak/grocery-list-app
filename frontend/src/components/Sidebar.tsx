@@ -13,6 +13,7 @@ interface SidebarProps {
   onListDeleted: (deletedListId: number) => void;
   loading: boolean;
   error: string | null;
+  onLogout: () => void //onLogout: function(): void
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -22,7 +23,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onListCreated,
   onListDeleted,
   loading,
-  error
+  error,
+  onLogout
   }) => {
   const [newListName, setNewListName] = useState<string>('');
   const [isCreatingList, setIsCreatingList] = useState<boolean>(false);
@@ -63,8 +65,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return(
     <aside className="sidebar">
-      <h2>My Lists</h2>
-
+      <div className = 'sidebar-header'>
+        <h2>My Lists</h2>
+        <button onClick ={onLogout} className= 'Logout-button'>Logout</button>
+      </div>
       <div className="create-list-section">
         <form onSubmit={handleCreateList}>
           <input

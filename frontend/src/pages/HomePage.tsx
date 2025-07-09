@@ -104,6 +104,7 @@ const HomePage: React.FC<HomePageProps> = ({onLogout}) => {
                 onListDeleted={handleListDeleted}
                 loading={loadingLists}
                 error={error}
+                onLogout = {handleInternalLogout}
                 />
 
                 <GroceryListDetail 
@@ -115,7 +116,6 @@ const HomePage: React.FC<HomePageProps> = ({onLogout}) => {
                 }
                 />
             </div>
-            <button onClick = {handleInternalLogout}>Logout</button>
         </div>
     )
 }
