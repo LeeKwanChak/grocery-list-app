@@ -3,3 +3,43 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.list-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    cursor: pointer;
+}
+
+.list-item:hover{
+    background-color: #ffffff; 
+}
+
+.create-list-section input{
+    flex-grow: 1;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    outline: none;
+}
+
+.create-list-section button{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.create-list-section form{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}

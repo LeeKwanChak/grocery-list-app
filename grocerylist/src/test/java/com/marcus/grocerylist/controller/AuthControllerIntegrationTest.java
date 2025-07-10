@@ -1,6 +1,7 @@
 package com.marcus.grocerylist.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marcus.grocerylist.dto.LoginRequest;
 import com.marcus.grocerylist.dto.RegistrationRequest;
 import com.marcus.grocerylist.exception.UserAlreadyExistsException;
 import com.marcus.grocerylist.jwt.JwtUtil;
@@ -16,6 +17,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -110,29 +113,40 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testLoginSuccess() throws Exception {
-        RegistrationRequest authRequest = new RegistrationRequest("test@example.com", "password123");
+        LoginRequest loginRequest = new LoginRequest("test@example.com", "password123");
 
         String expectedToken = "mocked.jwt.token";
         String testUserEmail = "test@example.com";
+        String actualUsernameInDb = "testUserActual";
+
+        User mockUser = new User();
+        mockUser.setEmail(testUserEmail);
+        mockUser.setUsername(actualUsernameInDb);
+        mockUser.setPassword("encodedPassword");
+
+        when(userService.findByEmail(loginRequest.getEmail()))
+                .thenReturn(Optional.of(mockUser));
 
         Authentication authentication = mock(Authentication.class);
-        when(authentication.getName()).thenReturn(testUserEmail);
+        when(authentication.getName()).thenReturn(actualUsernameInDb);
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(authenticationManager.authenticate(eq(new UsernamePasswordAuthenticationToken(actualUsernameInDb, loginRequest.getPassword()))))
                 .thenReturn(authentication);
 
-        when(jwtUtil.generateToken(testUserEmail)).thenReturn(expectedToken);
+        when(jwtUtil.generateToken(actualUsernameInDb)).thenReturn(expectedToken);
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(authRequest)))
+                        .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value(expectedToken));
 
+        verify(userService, times(1)).findByEmail(loginRequest.getEmail());
+
         verify(authenticationManager, times(1)).authenticate(
-                new UsernamePasswordAuthenticationToken(testUserEmail, "password123")
+                new UsernamePasswordAuthenticationToken(actualUsernameInDb, loginRequest.getPassword())
         );
-        verify(jwtUtil, times(1)).generateToken(testUserEmail);
+        verify(jwtUtil, times(1)).generateToken(actualUsernameInDb);
     }
 
 }

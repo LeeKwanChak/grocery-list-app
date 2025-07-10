@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 import api from '../utils/api';
 import type { GroceryList, Item } from '../pages/HomePage';
+import './GroceryListDetail.css';
 
 interface ItemCreateRequestBody {
   name: string;
@@ -143,6 +144,14 @@ const GroceryListDetail: React.FC<GroceryListDetailProps> = ({ selectedListId, s
     }
   }
 
+  
+  async function handleBatchDeleteItem(){
+  }
+
+  async function handleBatchCreateItem(){
+
+  }
+
   if (!selectedListId || !selectedList){
     return (
         <p>Please select or create a grocery list from the sidebar</p>
@@ -151,7 +160,7 @@ const GroceryListDetail: React.FC<GroceryListDetailProps> = ({ selectedListId, s
 
   return (
     <div className="grocery-list-detail-container">
-      <h3>{selectedList.name}</h3>
+      <h2>{selectedList.name}</h2>
 
       <div className="add-item-section">
         <form onSubmit={handleAddItem}>
@@ -223,22 +232,22 @@ const GroceryListDetail: React.FC<GroceryListDetailProps> = ({ selectedListId, s
           <div className="item-list">
             {completedItem.map((item) => (
               <div className="item-row">
-                    <input
-                      type="checkbox"
-                      checked={item.completed}
-                      onChange={() => handleUpdateItem(item, { completed: !item.completed })}
-                    />
+                  <input
+                    type="checkbox"
+                    checked={item.completed}
+                    onChange={() => handleUpdateItem(item, { completed: !item.completed })}
+                  />
                   <span className={`item-name ${item.completed ? 'completed' : ''}`}>
                     {item.name}
                   </span>
-                    <input
+                    {/* <input
                       type="number"
                       min="1"
                       value={item.quantity}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => handleUpdateItem(item, {quantity: parseInt(e.target.value) || 1})
                       }
                       className="quantity-input"
-                    />
+                    /> */}
                  <button
                    className="delete-item-button"
                    onClick={() => handleDeleteItem(item.id)}

@@ -64,10 +64,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return(
-    <aside className="sidebar">
+    <aside className='sidebar'>
       <div className = 'sidebar-header'>
-        <h2>My Lists</h2>
-        <button onClick ={onLogout} className= 'Logout-button'>Logout</button>
+      <h2>My Lists</h2>
+      <button onClick ={onLogout} className= 'Logout-button'>Logout</button>
       </div>
       <div className="create-list-section">
         <form onSubmit={handleCreateList}>
@@ -96,10 +96,9 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div
                 key={list.id}
                 className={`list-item ${selectedListId === list.id ? 'selected' : ''}`}
+                onClick={() => onSelectGroceryList(list.id)}
               >
-                <span className="list-name" onClick={() => onSelectGroceryList(list.id)}>
-                  {list.name}
-                </span>
+                <span className="list-name"># {list.name}</span>
                 <button
                   className="delete-list-button"
                   onClick={() => handleDeleteList(list.id, list.name)}

@@ -39,7 +39,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
         }   
         )
         if(response.ok){
-            const data = await response.json();
+            // const data = await response.json();
             console.log('Registration successful!')
             alert('Registration successful!')
             onSwitchToLogin();

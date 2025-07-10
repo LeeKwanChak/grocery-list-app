@@ -38,9 +38,6 @@ function App() {
           }
           />
         </Routes>
-        <footer>
-          <p>&copy; 2025 My Grocery List App</p>
-        </footer>
       </div>
     </Router>
   )

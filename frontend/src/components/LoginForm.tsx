@@ -39,7 +39,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess
       const errorData = await response.json();
       console.error('Login failed:', errorData);
       if (response.status === 401) {
-          setError(errorData.message || 'Invalid email or password.');
+          setError('Invalid email or password.');
       } else {
           setError(errorData.message || 'An unexpected error occurred during login.');
       }
