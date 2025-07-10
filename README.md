@@ -38,7 +38,7 @@ Frontend
 ![Main HomePage Screenshot](Screenshot/Screenshot.PNG)
 
 ### Login Page
-![Login Page Screenshot](Screenshot/LoginPage.png)
+![Login Page Screenshot](Screenshot/LoginPage.PNG)
 
 ## Future Enhancements
 
