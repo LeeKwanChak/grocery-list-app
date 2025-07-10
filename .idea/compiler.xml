@@ -10,13 +10,13 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
-        <module name="grocerylist" />
+        <module name="backend" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="grocerylist" options="-parameters" />
+      <module name="backend" options="-parameters" />
     </option>
   </component>
 </project>
