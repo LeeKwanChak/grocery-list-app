@@ -84,6 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         </form>
         {createListError && <p className="error-message">{createListError}</p>}
       </div>
+      
+      {error && <p className="error-message">{error}</p>}
 
       <div className="list-container">
         {loading ? (
