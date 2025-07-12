@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Form.css';
+import api from '../utils/api';
 
 
 interface RegisterFormProps{
@@ -28,32 +29,26 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
         }
         setError('');
     
-
-    try{
-        const response = await fetch('http://localhost:8080/auth/register',{
-            method :'Post',
-            headers : {
-                'Content-Type' : 'application/json',
-            },
-            body: JSON.stringify({username, email, password }),
-        }   
-        )
-        if(response.ok){
-            // const data = await response.json();
-            console.log('Registration successful!')
-            alert('Registration successful!')
+        try{
+            const response = await api.post('/auth/register',{
+                username,
+                email,
+                password
+            })
+            const data = response.data;
+            console.log('Registration successful:', data);
+            alert('Registration successful!');
             onSwitchToLogin();
-        }else{
-            const errorData = await response.json();
-            console.error('Registration failed:', errorData);
-            setError(errorData.message || 'An unexpected error occurred.')
+        }catch(err:any){
+            console.log('Registration failed:', err);
+            if(err.request){
+                setError('Network error or server is unreachable.');
+            }else{
+                setError(err.message || 'An unexpected error occurred.')
+            }
+        }finally{
+            setLoading(false)
         }
-    } catch(err) {
-        console.error('Network error or unexpected issue:', err);
-        setError('Network error or server is unreachable.');
-    } finally {
-      setLoading(false);
-    }
     }
 
     return(

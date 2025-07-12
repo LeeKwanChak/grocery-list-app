@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Form.css';
 import { setToken } from '../utils/auth';
+import api from '../utils/api';
 
   interface LoginFormProps{
     onLoginSuccess: (token: string) => void
@@ -19,37 +20,26 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess
     setLoading(true);
 
     try{
-      const response = await fetch('http://localhost:8080/auth/login',{
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-    });
-    if(response.ok){
-      const data = await response.json();
+      const response = await api.post('/auth/login',{
+        email, password
+      })
+      const data = response.data;
       console.log('Login successful:' , data);
       alert('Login successful!');
       setToken(data.token);
       console.log('JWT Token saved:', data.token);
       onLoginSuccess(data.token);
-      
-    }else{
-
-      const errorData = await response.json();
-      console.error('Login failed:', errorData);
-      if (response.status === 401) {
-          setError('Invalid email or password.');
-      } else {
-          setError(errorData.message || 'An unexpected error occurred during login.');
+    }catch(err:any){
+      console.error('Login failed:');
+      if(err.request){
+        setError('Network error or server is unreachable.');
+      }else if(err.response && err.response.status === 401){
+        setError('Invalid email or password.')
+      }else{
+        setError('An unexpected error occurred.');
       }
-    }}
-    catch(err){
-      console.error('Network error or unexpected issue:', err);
-      setError('Network error or server is unreachable.');
-
     } finally{
-      setLoading(false);
+      setLoading(false)
     }
   }
 
