@@ -55,7 +55,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173",
                 "https://grocery-list-app-production-deee.up.railway.app",
-                "grocery-list-app-production-deee.up.railway.app"));
+                "grocery-list-app-production-deee.up.railway.app",
+                "https://diligent-tenderness-production.up.railway.app",
+                "diligent-tenderness-production.up.railway.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
