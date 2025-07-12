@@ -31,10 +31,10 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess
       onLoginSuccess(data.token);
     }catch(err:any){
       console.error('Login failed:');
-      if(err.request){
-        setError('Network error or server is unreachable.');
-      }else if(err.response && err.response.status === 401){
+      if(err.response && err.response.status === 401){
         setError('Invalid email or password.')
+      }else if(err.request){
+        setError('Network error or server is unreachable.');
       }else{
         setError('An unexpected error occurred.');
       }

@@ -38,11 +38,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
             alert('Registration successful!');
             onSwitchToLogin();
         }catch(err:any){
-            console.log('Registration failed:', err);
-            if(err.request){
+            
+            console.error('Registration failed:', err);
+            if(err.response){
+                setError(err.response.data.message );
+            } else if(err.request){
                 setError('Network error or server is unreachable.');
-            }else{
-                setError(err.message || 'An unexpected error occurred.')
+            } else{
+                setError('An unexpected error occurred.');
             }
         }finally{
             setLoading(false)
