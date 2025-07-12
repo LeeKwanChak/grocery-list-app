@@ -144,13 +144,13 @@ const GroceryListDetail: React.FC<GroceryListDetailProps> = ({ selectedListId, s
     }
   }
 
-  
-  async function handleBatchDeleteItem(){
-  }
+  // Future Enhancements
+  // async function handleBatchDeleteItem(){
+  // }
 
-  async function handleBatchCreateItem(){
+  // async function handleBatchCreateItem(){
 
-  }
+  // }
 
   if (!selectedListId || !selectedList){
     return (

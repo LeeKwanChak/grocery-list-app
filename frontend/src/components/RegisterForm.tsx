@@ -15,13 +15,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSubmit = async  (e: React.FormEvent) => {
         e.preventDefault()
         setError(null);
         setLoading(true);
-        setSuccessMessage(null);
         if(password !== confirmPassword){
             setError('Passwords do not match')
             setLoading(false);
@@ -99,7 +97,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onSwitchToLogin}) => {
                     />
                 </div>
                 {error && <p className="error-message">{error}</p>}
-                <button type="submit">Sign up</button>
+                <button type="submit" disabled={loading}>Sign up</button>
             </form>
             <p>
                 Already have an account?{' '}

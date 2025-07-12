@@ -73,7 +73,7 @@ const LoginForm: React.FC<LoginFormProps> = ({onSwitchToRegister, onLoginSuccess
         </div>
         {error && <p className="error-message">{error}</p>} 
 
-        <button type="submit">Sign in</button>
+        <button type="submit" disabled={loading}>Sign in</button>
       </form>
       <p>
         Do not have an account?{' '}

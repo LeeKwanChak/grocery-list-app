@@ -14,7 +14,7 @@ function App() {
     }
   }, [])
 
-  const handleLoginSuccess = (jwt_token: string) =>{
+  const handleLoginSuccess = () =>{
     setIsAuthenticated(true)
   }
 
