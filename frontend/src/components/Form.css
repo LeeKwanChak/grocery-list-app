@@ -5,6 +5,7 @@
     width: 100%;
     max-width: 420px;
     text-align: center;
+    border: 2px solid #000000;
 }
 
 .form-container h2 {

@@ -4,4 +4,9 @@
     align-items: center;
     min-height: 100vh;
     color: #333;
+
+    background-image: url('market.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
