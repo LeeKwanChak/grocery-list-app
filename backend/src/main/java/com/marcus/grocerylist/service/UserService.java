@@ -74,7 +74,6 @@ public class UserService {
         if (!deleteUser.getUsername().equals(currentUsername)) {
             throw new UnauthorizedAccessException("You are not authorized to delete this user.");
         }
-
         userRepository.deleteById(userId);
     }
 

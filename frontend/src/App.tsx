@@ -37,6 +37,7 @@ function App() {
             isAuthenticated ? <HomePage onLogout={handleLogout} /> : <Navigate to = "/auth" replace/>
           }
           />
+          
         </Routes>
       </div>
     </Router>

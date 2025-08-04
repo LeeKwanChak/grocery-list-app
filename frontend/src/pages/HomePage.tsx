@@ -94,7 +94,6 @@ const HomePage: React.FC<HomePageProps> = ({onLogout}) => {
 
     return(
         <div className='home-page'>
-
             <div className= 'main-content-area'>
                 <Sidebar
                 groceryLists={groceryLists}

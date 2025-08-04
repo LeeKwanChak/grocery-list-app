@@ -2,7 +2,6 @@
 
 This is a web application designed to help users manage their shopping lists efficiently. The application features a backend for handling CRUD operations and user authentication, and a clear, functional frontend for user interaction.
 
-Live Demo: https://my-grocery-list-app.up.railway.app/
 
 ## Key Features
 
